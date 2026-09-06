@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/multi_image_select.dart';
-import 'package:flutter_application_1/screens/multi_selection.dart';
+import 'package:flutter_application_1/screens/image_select.dart';
+import 'package:flutter_application_1/screens/single_selection.dart';
 import 'package:flutter_application_1/screens/toggle_selection.dart';
 
 class Root extends StatefulWidget {
@@ -13,18 +13,23 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> {
   final PageController controller = PageController();
   List<Widget> pages = [
-    MultiSelection(),
+    SingleSelection(),
+    ImageSelection(),
     ToggleSelection(),
-    MultiImageSelect(),
+    
   ];
+  int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
+        physics: NeverScrollableScrollPhysics(),
         controller: controller,
         children: pages,
         onPageChanged: (v) {
-          setState(() {});
+          setState(() {
+            currentIndex = v;
+          });
         },
       ),
       bottomNavigationBar:Padding(
@@ -34,38 +39,52 @@ class _RootState extends State<Root> {
           children: [
             Row(
               children: [
-                Container(
-                  height: 50,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(10),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      controller.jumpToPage((currentIndex - 1 + pages.length) % pages.length);
+                    });
+                  },
+                  child: Container(
+                    height: 50,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 214, 213, 213),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                      child:Row(
+                        children: [
+                          Icon(Icons.arrow_back,color: Colors.blueAccent,),
+                          //Text("Previous Page",style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.bold),),
+                          
+                        ],
+                      )
+                    
                   ),
-                    child:Row(
-                      children: [
-                        Icon(Icons.arrow_back,color: Colors.white,),
-                        Text("Previous Page",style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.bold),),
-                        
-                      ],
-                    )
-                  
                 ),
                 SizedBox(width: 20,),
-                Container(
-
-                  height: 50,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                    child:Row(
-                      children: [
-                        Text("Next Page",style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.bold),),
-                        Icon(Icons.arrow_forward,color: Colors.white,),
-                      ],
-                    )
+                GestureDetector(
+                  onTap:(){
+                    setState(() {
+                      controller.jumpToPage((currentIndex + 1) % pages.length);
+                    });
+                  },
+                  child: Container(
                   
+                    height: 50,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.blueAccent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                      child:Row(
+                        children: [
+                          Text("Next Page",style: TextStyle(color: Colors.white,fontSize: 15,fontWeight: FontWeight.bold),),
+                          Icon(Icons.arrow_forward,color: Colors.white,),
+                        ],
+                      )
+                    
+                  ),
                 ),
               ],
             )

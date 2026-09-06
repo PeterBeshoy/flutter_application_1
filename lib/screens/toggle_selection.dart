@@ -7,12 +7,7 @@ class ToggleSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueAccent,
-      appBar: AppBar(
-        title: const Text('Toggle Selection'),
-      ),
-      body: const Center(
-        child: Text('Toggle Selection Screen'),
-      ),
+     
     );
   }
 }
